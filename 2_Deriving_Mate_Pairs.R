@@ -92,58 +92,58 @@ setwd("/path/to/file/")
 ## Spousal Detection using the Colocation file ##
 #################################################
 
-	# Create Pair ID's based on matches in multiple columns (Colocation IDs)
-		UKB_Colocation <- data.frame(UKB %>%
-			group_by(group, NumInHouse, OwnRent, TDI) %>%
-			mutate(PairID =cur_group_id()))
+# Create Pair ID's based on matches in multiple columns (Colocation IDs)
+	UKB_Colocation <- data.frame(UKB %>%
+		group_by(group, NumInHouse, OwnRent, TDI) %>%
+		mutate(PairID =cur_group_id()))
 
-	# Remove Colocation ID's that are shared by more/ fewer than two people:
-		# Before: Before: 175,250 rows | After: # 160,738
-		Coloc_Table <- data.frame(table(UKB_Colocation$PairID))
-		colnames(Coloc_Table)[1] <- 'PairID'
-		Coloc_Table <- Coloc_Table[Coloc_Table$Freq == 2, ]
-		UKB_Colocation <- UKB_Colocation[UKB_Colocation$PairID %in% Coloc_Table$PairID,] # 160,738
+# Remove Colocation ID's that are shared by more/ fewer than two people:
+	# Before: Before: 175,250 rows | After: # 160,738
+	Coloc_Table <- data.frame(table(UKB_Colocation$PairID))
+	colnames(Coloc_Table)[1] <- 'PairID'
+	Coloc_Table <- Coloc_Table[Coloc_Table$Freq == 2, ]
+	UKB_Colocation <- UKB_Colocation[UKB_Colocation$PairID %in% Coloc_Table$PairID,] # 160,738
 
-	# Create "PairSex" ID's based on the Pair ID (created above) and Sex:
-		UKB_Colocation <- data.frame(UKB_Colocation %>%
-			group_by(PairID, Sex) %>%
-			mutate(PairSex =cur_group_id()))
+# Create "PairSex" ID's based on the Pair ID (created above) and Sex:
+	UKB_Colocation <- data.frame(UKB_Colocation %>%
+		group_by(PairID, Sex) %>%
+		mutate(PairSex =cur_group_id()))
 
-	# Remove Same-Sex Pairs (i.e., rows with PairSex IDs that belong to more than one person):
-		# Before: 160,738 | After: 159,998
-		PairSex_Frequency <- data.frame(table(UKB_Colocation$PairSex))
-		colnames(PairSex_Frequency)[1] <- 'PairSex'
-		PairSex_Frequency <- PairSex_Frequency[PairSex_Frequency$Freq==1, ]
-		UKB_Colocation <- UKB_Colocation[UKB_Colocation$PairSex %in% PairSex_Frequency$PairSex,]
+# Remove Same-Sex Pairs (i.e., rows with PairSex IDs that belong to more than one person):
+	# Before: 160,738 | After: 159,998
+	PairSex_Frequency <- data.frame(table(UKB_Colocation$PairSex))
+	colnames(PairSex_Frequency)[1] <- 'PairSex'
+	PairSex_Frequency <- PairSex_Frequency[PairSex_Frequency$Freq==1, ]
+	UKB_Colocation <- UKB_Colocation[UKB_Colocation$PairSex %in% PairSex_Frequency$PairSex,]
 
-	# Include couples that chose adjacent household income categories, or where at least one said "I don't know"/ "Prefer not to answer". 
-    # We're keeping people with a difference of 0 or 1 (because they're close enough), and people with a difference >= 1000 (because that means one didn't answer)
-		# In other words, we're removing anybody with a difference of 2, 3, or 4. 
-		# Before: 159,998 | After: 158,350
+# Include couples that chose adjacent household income categories, or where at least one said "I don't know"/ "Prefer not to answer". 
+# We're keeping people with a difference of 0 or 1 (because they're close enough), and people with a difference >= 1000 (because that means one didn't answer)
+	# In other words, we're removing anybody with a difference of 2, 3, or 4. 
+	# Before: 159,998 | After: 158,350
 
-		# Change 'I don't know" and "Prefer not to answer" to -999
-		UKB_Colocation$HouseholdIncome[UKB_Colocation$HouseholdIncome == -3] <- -999
-		UKB_Colocation$HouseholdIncome[UKB_Colocation$HouseholdIncome == -1] <- -999
+	# Change 'I don't know" and "Prefer not to answer" to -999
+	UKB_Colocation$HouseholdIncome[UKB_Colocation$HouseholdIncome == -3] <- -999
+	UKB_Colocation$HouseholdIncome[UKB_Colocation$HouseholdIncome == -1] <- -999
 
-		# Create a subtraction function and apply it within each pair.
-		minus <- function(x) x[1] - x[2] 
-		UKB_Colocation <- data.frame(UKB_Colocation %>%
-			group_by(PairID) %>%
-			mutate(Income_Difference = abs(minus(HouseholdIncome))))
-		UKB_Colocation <- UKB_Colocation[!(UKB_Colocation$Income_Difference %in% c(2,3,4)),]
+	# Create a subtraction function and apply it within each pair.
+	minus <- function(x) x[1] - x[2] 
+	UKB_Colocation <- data.frame(UKB_Colocation %>%
+		group_by(PairID) %>%
+		mutate(Income_Difference = abs(minus(HouseholdIncome))))
+	UKB_Colocation <- UKB_Colocation[!(UKB_Colocation$Income_Difference %in% c(2,3,4)),]
 
-	# Use the subtraction function to remove based on age differences
-		# Before: 158,350 | After: 158,148
-		UKB_Colocation <- data.frame(UKB_Colocation %>%
-			group_by(PairID) %>%
-			mutate(Age_Difference = abs(minus(Age))))
-		UKB_Colocation <- UKB_Colocation[UKB_Colocation$Age_Difference < 20,]
+# Use the subtraction function to remove based on age differences
+	# Before: 158,350 | After: 158,148
+	UKB_Colocation <- data.frame(UKB_Colocation %>%
+		group_by(PairID) %>%
+		mutate(Age_Difference = abs(minus(Age))))
+	UKB_Colocation <- UKB_Colocation[UKB_Colocation$Age_Difference < 20,]
 
+# Save Output:
 	fwrite(UKB_Colocation, 'UKB_Cohabitation_Updated.txt', sep=',')
-		
-    UKB_Mates_All_Ethnicities <- UKB_Colocation[,c('f.eid', 'Sex', 'PairID')]
+
+	UKB_Mates_All_Ethnicities <- UKB_Colocation[,c('f.eid', 'Sex', 'PairID')]
 	fwrite(UKB_Mates_All_Ethnicities, 'UKB_Mate_Pairs_All.txt', sep=',')
-		
 
 #########################
 ##    Check Results    ##
