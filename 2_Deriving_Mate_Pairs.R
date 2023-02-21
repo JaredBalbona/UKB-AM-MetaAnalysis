@@ -1,8 +1,3 @@
-
-#############################################################
-#    SCRIPT TO GET ID NUMBERS OF MATE PAIRS IN THE UKB      #
-#############################################################
-
 library(data.table)
 library(tidyverse)
 
@@ -213,11 +208,7 @@ setwd("/path/to/file/")
     # names(JaredPairs)[names(JaredPairs) == 'PairID'] <- 'PairID_Jared'
     JaredPairs$Sex <- recode(as.character(JaredPairs$Sex), '1' = 'M', '0' = 'F')
 
-##################
-# Create Subsets #
-##################
-
-# Create datasets:
+# Compare Subsets:
     Yengo_Phen  <- merge(YengoPairs, Phenotypes, by='f.eid')
     Jared_Phen  <- merge(JaredPairs, Phenotypes, by='f.eid')
 
@@ -225,23 +216,23 @@ setwd("/path/to/file/")
     Only_Yengo  <- merge(YengoPairs[!(YengoPairs$f.eid %in% JaredPairs$f.eid),], Phenotypes, by='f.eid')
     In_Both     <- merge(YengoPairs[ (YengoPairs$f.eid %in% JaredPairs$f.eid),], Phenotypes, by='f.eid')
 
-# Long to Wide:
+    # Long to Wide:
     Jared_Phen  <- long_to_wide(Jared_Phen)
     Yengo_Phen  <- long_to_wide(Yengo_Phen)
     Only_Jared  <- long_to_wide(Only_Jared)
     Only_Yengo  <- long_to_wide(Only_Yengo)
     In_Both     <- long_to_wide(In_Both)
 
-# Get correlation results:
+    # Get correlation results:
     Jared_Results <- mate_correlations('Jared_Phen')
     Yengo_Results <- mate_correlations('Yengo_Phen')
     Only_Jared_Results <- mate_correlations('Only_Jared')
     Only_Yengo_Results <- mate_correlations('Only_Yengo')
     In_Both_Results    <- mate_correlations('In_Both')
 
-# Compare Results:
-# This approach is based on the third most upvoted post in this stackexchange thread: 
-# https://stats.stackexchange.com/questions/278751/how-do-i-determine-whether-two-correlations-are-significantly-different
+# Get Results:
+    # This approach is based on the third most upvoted post in this stackexchange thread: 
+    # https://stats.stackexchange.com/questions/278751/how-do-i-determine-whether-two-correlations-are-significantly-different
     n1 <- nrow(Yengo_Phen)
     n2 <- nrow(Only_Jared)
 
