@@ -21,7 +21,8 @@ Please feel free to reach out to me at jaba5258@colorado.edu with any quesitonsâ
      
  2. #### Deriving_Mate_Pairs.R: ####
    - This script seeks to identify which pairs of participants in the UK Biobank are mates/ partners/ spouses, etc. based on a variety of demographic questions. While our approach is similar those used in past studies of assortment, ours manages to identify 79K mate pairsâ€” Substantially more than nearly all existant studies of AM.
-     - As described in our manuscript, I used used colocation/ cohabitation information provided by the UK Biobank to identify which participants reside at the same address. Importantly, this does not necessarily mean that they live in the same *residence*, as it could include apartment complexes, assisted living faciliites, etc. 
+     - As described in our manuscript, I used used colocation/ cohabitation information provided by the UK Biobank to identify which participants reside at the same address. Importantly, this does not necessarily mean that they live in the same *residence*, as it could include apartment complexes, assisted living faciliites, etc.
+     - It is also important to note that, while the colocation/ cohabitation file is no longer available from the UKB, this information can be approximated quite closely using other variables such as latitude, longitude, and measures of measures of physical proximity (see Border et al. 2022). 
    -  Once pairs were identified, I compared the similarity of mates in our sample to those identified in [a previous study by Yengo et al. (2018)](https://www.nature.com/articles/s41562-018-0476-3). For context, I was able to obtain the pairs used in the Yengo et al. study (prior to running this script) by using code that was kindly sent to me by the authors.
    
  3. #### UKB_Mate_Correlations.R: ####
