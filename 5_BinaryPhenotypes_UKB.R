@@ -33,6 +33,7 @@ Binary <- c("Chronotype", "Breastfed", "Adopted", "Multiple_Birth", "MSP",
 # Prepare/ Run the Correlations
 Partial = FALSE # Choose partial or zero order correlation: 
 
+# Based on this choice, load the appropriate covariates:
 if(Partial == TRUE){
   Covariates <- c(paste0('PC', 1:10, '_M'), paste0('PC', 1:10, '_F'), 
                   "Born_in_British_Isles_M", "Born_in_British_Isles_F", 
