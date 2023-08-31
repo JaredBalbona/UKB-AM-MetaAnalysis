@@ -4,10 +4,10 @@
 
 ### Broad Summary:
 
-These scripts contain nearly all of the code for [a recent publication in Nature Human Behavior](https://www.nature.com/articles/s41562-023-01672-z) with Tanya Horwitz, Katie Paulich, and Matt Keller. Taken as a whole, the majority of what's included serves to get the data in the appropriate form to be analyzed— the analysis themselves make up a relatively small portion of what's included. My goal is that these scripts will be useful for researchers who are curious about how exactly are study was performed, and interested in building upon it themselves
+These scripts contain nearly all of the code for [a recent publication in Nature Human Behavior](https://www.nature.com/articles/s41562-023-01672-z) that I worked on with Tanya Horwitz, Katie Paulich, and Matt Keller. Taken as a whole, the majority of what's included here serves to get the data in the appropriate form to be analyzed— the analysis themselves make up a relatively small portion of the code. My goal is that these scripts will be useful for researchers who are curious about how exactly are study was performed, and interested in building upon it themselves.
 
 
-Please feel free to reach out to me at jaba5258@colorado.edu with any quesitons— Thanks!
+Please feel free to reach out to me at jared.v.balbona@gmail.com with any quesitons— Thanks!
 
 ----
 
